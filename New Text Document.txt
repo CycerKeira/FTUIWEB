@@ -1,0 +1,8 @@
+@echo off
+title FTUI Auto Launcher
+echo Menyalakan server dan membuka browser...
+start "FTUI Server" cmd /k "python -m http.server 8000"
+timeout /t 2 >nul
+start http://localhost:8000/index.html
+start http://localhost:8000/anak.html
+exit

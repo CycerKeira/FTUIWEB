@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FTUI Parent Companion — Inclusive Learning</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="a11y-bar">
+  <span>Ukuran teks:</span>
+  <button data-fs="normal" class="active" onclick="setFont('normal',this)">Normal</button>
+  <button data-fs="large" onclick="setFont('large',this)">Besar</button>
+  <button data-fs="xlarge" onclick="setFont('xlarge',this)">Sangat Besar</button>
+  <button onclick="toggleContrast(this)">Kontras Tinggi</button>
+</div>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen">
+  <aside class="brand-panel">
+    <div class="brand-top">
+      <div class="brand-logo-row">
+        <div class="brand-logo">FT</div>
+        <div>
+          <h1>FTUI Parent Companion</h1>
+          <p>Pendamping Belajar Inklusif</p>
+        </div>
+      </div>
+      <h2>Memahami ritme belajar anak, <span class="highlight">tanpa melanggar privasinya.</span></h2>
+      <p class="lead">Dashboard khusus orang tua mahasiswa Fakultas Teknik Universitas Indonesia — jembatan informasi, bukan alat pengawasan.</p>
+      <ul class="feature-list">
+        <li><div class="feat-icon">🔒</div><div><strong>Privasi Terjaga</strong><span>Nilai detail & isi konseling tidak ditampilkan</span></div></li>
+        <li><div class="feat-icon">📝</div><div><strong>Kegiatan Anak</strong><span>Pantau praktikum, kerja kelompok, organisasi</span></div></li>
+        <li><div class="feat-icon">📊</div><div><strong>Dibagikan oleh Anak</strong><span>Anak memilih data apa yang ingin dibagikan</span></div></li>
+        <li><div class="feat-icon">🤝</div><div><strong>Pendampingan, bukan Kontrol</strong><span>Fokus pada dukungan, bukan pengawasan</span></div></li>
+      </ul>
+    </div>
+    <div class="brand-footer">© 2026 FTUI Parent Companion — Dibuat dengan semangat pendampingan. 💛</div>
+  </aside>
+
+  <div class="form-panel">
+    <div class="form-card">
+      <div class="form-header">
+        <div class="avatar">👋</div>
+        <h2>Selamat Datang Kembali</h2>
+        <p>Masuk untuk melihat ringkasan belajar anak Anda</p>
+      </div>
+
+      <div class="error-msg" id="errorMsg"></div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label for="email">Email Orang Tua</label>
+          <div class="input-wrap">
+            <span class="input-icon">✉️</span>
+            <input type="text" id="email" placeholder="nama@email.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Kata Sandi</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔑</span>
+            <input type="password" id="password" placeholder="Masukkan kata sandi" required />
+            <button type="button" class="toggle-pw" onclick="togglePassword(this)" aria-label="Tampilkan kata sandi">👁️</button>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="check-wrap">
+            <input type="checkbox" id="remember" />
+            <span>Ingat saya</span>
+          </label>
+          <a href="#" class="forgot-link" onclick="showToast('Fitur reset kata sandi akan segera hadir. 💛'); return false;">Lupa kata sandi?</a>
+        </div>
+        <button type="submit" class="btn-login" id="loginBtn">Masuk ke Dashboard →</button>
+      </form>
+
+      <div class="privacy-note" style="margin-top:1rem;">
+        <span>🔒</span>
+        <span>Hanya informasi yang dipilih dan disetujui anak yang tampil di dashboard. Nilai detail dan isi konseling tidak pernah ditampilkan.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboardScreen">
+  <header class="site">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo">FT</div>
+        <div>
+          <h1>FTUI Parent Companion</h1>
+          <p>Pendamping Belajar Inklusif Orang Tua Mahasiswa FTUI</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="header-cta" onclick="scrollToPanel('dukungan')">💬 Butuh Bantuan?</button>
+        <button class="header-logout" onclick="handleLogout()">Keluar</button>
+      </div>
+    </div>
+    <div class="hero">
+      <h2>Memahami ritme belajar anak, tanpa melanggar privasinya.</h2>
+      <p>Dashboard ini dirancang khusus untuk orang tua mahasiswa Fakultas Teknik Universitas Indonesia — sebagai jembatan informasi, bukan alat pengawasan.</p>
+      <div class="hero-badges">
+        <span>🔒 Privasi Terjaga</span>
+        <span>📝 Kegiatan Anak</span>
+        <span>📍 Aktivitas Realtime</span>
+        <span>🌱 Inklusif & Ramah</span>
+        <span>📊 Dibagikan Anak</span>
+        <span>🤝 Pendampingan, bukan Kontrol</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <div class="tabs-inner" id="tabs">
+      <button class="active" data-panel="dashboard">🏠 Dashboard</button>
+      <button data-panel="aktivitas">📍 Aktivitas Anak</button>
+      <button data-panel="jadwal">📚 Jadwal Matkul</button>
+      <button data-panel="kegiatan">📝 Kegiatan Anak</button>
+      <button data-panel="ritme">📅 Ritme Belajar</button>
+      <button data-panel="ekosistem">🎓 Ekosistem Teknik</button>
+      <button data-panel="dukungan">💚 Dukungan Inklusif</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section class="panel active" id="dashboard">
+      <div class="privacy-note" style="margin-bottom:1.25rem;">
+        <span>🔒</span>
+        <span><strong>Data contoh.</strong> Pada penggunaan nyata, setiap angka di bawah hanya tampil jika anak mengizinkannya, dan anak bisa mematikannya kapan saja.</span>
+      </div>
+      <div class="section-title">
+        <h2>Selamat datang, Bapak/Ibu 👋</h2>
+        <p>Ringkasan kondisi belajar anak Anda — disajikan secara agregat untuk menjaga privasi.</p>
+      </div>
+      <div class="grid grid-4" style="margin-bottom:1.5rem;" id="statsGrid">
+        <div class="stat" data-stat="attendance"><div class="label">Kehadiran Kelas</div><div class="value">—</div><div class="note">Menunggu data…</div></div>
+        <div class="stat" data-stat="taskLoad"><div class="label">Beban Tugas</div><div class="value">—</div><div class="note">Menunggu data…</div></div>
+        <div class="stat" data-stat="sleep"><div class="label">Jam Tidur</div><div class="value">—</div><div class="note">Menunggu data…</div></div>
+        <div class="stat" data-stat="mood"><div class="label">Mood Belajar</div><div class="value">—</div><div class="note">Menunggu data…</div></div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card"><div class="icon gold">🔔</div><h3>Pengingat Pekan Ini</h3><p>Ada 2 ujian tengah semester dan 1 presentasi proyek. Mungkin waktu yang tepat untuk menanyakan kesiapan anak — tanpa menekan.</p></div>
+        <div class="card"><div class="icon green">📍</div><h3>Aktivitas Realtime</h3><p>Pantau ritme aktivitas anak di kampus secara sukarela di tab <strong>Aktivitas Anak</strong>.</p></div>
+        <div class="card"><div class="icon blue">📝</div><h3>Kegiatan Anak</h3><p>Lihat ringkasan praktikum, kerja kelompok, organisasi, dan belajar mandiri di tab <strong>Kegiatan Anak</strong>.</p></div>
+        <div class="card"><div class="icon yellow">🔒</div><h3>Privasi Terjaga</h3><p>Data nilai detail dan isi konseling tidak ditampilkan di sini. Anak tetap punya ruang pribadi yang aman.</p></div>
+      </div>
+    </section>
+
+    <!-- AKTIVITAS -->
+    <section class="panel" id="aktivitas">
+      <div class="section-title">
+        <h2>Aktivitas Anak Hari Ini</h2>
+        <p>Ringkasan aktivitas yang dibagikan <strong>secara sukarela</strong> oleh anak — tanpa lokasi presisi.</p>
+      </div>
+      <div class="privacy-note" style="margin-bottom:1.25rem;">
+        <span>🔒</span>
+        <span><strong>Berbagi sukarela.</strong> Anak bisa mengaktifkan/menonaktifkan berbagi dari aplikasinya kapan saja.</span>
+      </div>
+      <div class="live-card" id="liveCard">
+        <div class="live-pulse" id="livePulse"></div>
+        <div class="live-status">
+          <div class="live-label">STATUS SAAT INI</div>
+          <div class="live-value" id="liveValue">Memuat…</div>
+          <div class="live-sub" id="liveSub">--:--</div>
+        </div>
+        <div class="live-meta">
+          <div class="live-share-status">
+            <span class="share-dot" id="shareDot"></span>
+            <span id="shareText">Memuat…</span>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-2" style="margin-top:1.25rem;">
+        <div class="card"><div class="icon green">🌿</div><h3>Pola Aktivitas Sehat</h3><p>Ada jeda istirahat di antara kelas pagi dan sesi sore. Ini baik untuk recovery — hindari menambah ekspektasi di jam tersebut.</p></div>
+        <div class="card"><div class="icon blue">📊</div><h3>Kategori yang Dibagikan</h3><p>Hanya kategori umum: kelas, praktikum, istirahat, perpustakaan, organisasi, transit. Tanpa koordinat GPS.</p></div>
+      </div>
+    </section>
+
+    <!-- JADWAL MATKUL -->
+    <section class="panel" id="jadwal">
+      <div class="section-title">
+        <h2>Jadwal Mata Kuliah Anak</h2>
+        <p>Jadwal ini dibagikan secara sukarela oleh anak Anda.</p>
+      </div>
+      <div class="grid grid-3" id="parentMatkulGrid"></div>
+    </section>
+
+    <!-- KEGIATAN -->
+    <section class="panel" id="kegiatan">
+      <div class="section-title">
+        <h2>Kegiatan Anak</h2>
+        <p>Ringkasan kegiatan akademik dan non-akademik yang dibagikan anak secara sukarela.</p>
+      </div>
+      <div class="privacy-note" style="margin-bottom:1.25rem;">
+        <span>🔒</span>
+        <span><strong>Dibagikan anak.</strong> Anak memilih kegiatan mana yang ingin dibagikan. Detail isi dan nama rekan tetap privat.</span>
+      </div>
+      <div class="grid grid-2" id="kegiatanGrid"></div>
+    </section>
+
+    <!-- RITME -->
+    <section class="panel" id="ritme">
+      <div class="section-title">
+        <h2>Ritme Beban Belajar</h2>
+        <p>Peta kasar intensitas belajar anak per hari dalam seminggu.</p>
+      </div>
+      <div class="card">
+        <h3>Intensitas Pekan Ini</h3>
+        <div class="week" id="weekGrid" style="display:grid; grid-template-columns: repeat(7,1fr); gap:5px; text-align:center; font-size:0.85rem; margin-top:1rem;">
+          <div style="background:#FFD9D9; padding:12px 5px; border-radius:8px;">Sen<br><small>Padat</small></div>
+          <div style="background:#FFD9D9; padding:12px 5px; border-radius:8px;">Sel<br><small>Padat</small></div>
+          <div style="background:#FFF3C4; padding:12px 5px; border-radius:8px;">Rab<br><small>Sedang</small></div>
+          <div style="background:#FFD9D9; padding:12px 5px; border-radius:8px;">Kam<br><small>Padat</small></div>
+          <div style="background:#FFF3C4; padding:12px 5px; border-radius:8px;">Jum<br><small>Sedang</small></div>
+          <div style="background:#CDEBD8; padding:12px 5px; border-radius:8px;">Sab<br><small>Ringan</small></div>
+          <div style="background:#CDEBD8; padding:12px 5px; border-radius:8px;">Min<br><small>Ringan</small></div>
+        </div>
+      </div>
+      <div class="grid grid-2" style="margin-top:1.25rem;">
+        <div class="card"><div class="icon green">🌿</div><h3>Pola Sehat</h3><p>Anak Anda punya setidaknya 2 hari ringan per minggu. Ini cukup untuk recovery.</p></div>
+        <div class="card"><div class="icon gold">⚠️</div><h3>Perlu Perhatian</h3><p>Pekan UTS biasanya menjadi puncak beban. Ini normal dan akan mereda setelah ujian selesai.</p></div>
+      </div>
+    </section>
+
+    <!-- EKOSISTEM -->
+    <section class="panel" id="ekosistem">
+      <div class="section-title">
+        <h2>Mengenal Ekosistem Belajar Teknik</h2>
+        <p>Agar Bapak/Ibu bisa memahami apa yang sebenarnya dialami anak di FTUI.</p>
+      </div>
+      <div class="grid grid-3">
+        <div class="card"><div class="icon gold">📐</div><h3>Kultur Project-Based</h3><p>Mahasiswa teknik banyak belajar lewat proyek tim, bukan hanya ujian.</p></div>
+        <div class="card"><div class="icon blue">🛠️</div><h3>Praktikum</h3><p>Sesi lab sering sampai malam. Ini wajar, bukan tanda anak "keluyuran".</p></div>
+        <div class="card"><div class="icon green">📊</div><h3>Sistem Nilai Relatif</h3><p>Banyak mata kuliah menilai secara relatif. Nilai B bukan berarti gagal.</p></div>
+        <div class="card"><div class="icon yellow">🗓️</div><h3>Siklus Semester</h3><p>Awal semester ringan, naik menjelang UTS, memuncak saat UAS.</p></div>
+        <div class="card"><div class="icon blue">🤖</div><h3>Belajar Mandiri Intens</h3><p>Waktu "di kamar" bukan berarti malas — banyak materi harus dipelajari sendiri.</p></div>
+        <div class="card"><div class="icon gold">🌐</div><h3>Jaringan & Organisasi</h3><p>Kegiatan himpunan & lomba adalah bagian dari pembelajaran.</p></div>
+      </div>
+    </section>
+
+    <!-- DUKUNGAN INKLUSIF -->
+    <section class="panel" id="dukungan">
+      <div class="section-title">
+        <h2>Dukungan Inklusif untuk Anak</h2>
+        <p>Panduan praktis untuk mendampingi anak — tanpa melanggar privasinya.</p>
+      </div>
+      <div class="support-item"><div class="emoji">🧠</div><div><h4>Jika anak mengalami kesulitan belajar</h4><p>Tanyakan dulu apa yang ia rasakan, bukan langsung menawarkan les. Arahkan ke layanan konseling kampus bila perlu.</p></div></div>
+      <div class="support-item"><div class="emoji">💬</div><div><h4>Jika anak tampak stres atau murung</h4><p>Validasi perasaannya: "Kedengarannya berat ya." Hindari "kamu kurang bersyukur".</p></div></div>
+      <div class="support-item"><div class="emoji">🛌</div><div><h4>Jika jam tidur anak kurang</h4><p>Jangan langsung memarahi. Diskusikan jadwal bersama, bantu ciptakan lingkungan rumah yang mendukung istirahat.</p></div></div>
+      <div class="support-item"><div class="emoji">📵</div><div><h4>Jika anak sering menutup diri</h4><p>Hormati ruangnya. Tetap hadir tanpa memaksa. Sediakan waktu rutin untuk ngobrol ringan.</p></div></div>
+      
+      <!-- TIPS & PANDUAN (ACCORDION) -->
+      <div class="section-title" style="margin-top:2.5rem;">
+        <h2>Tips & Panduan Komunikasi</h2>
+        <p>Panduan singkat untuk berkomunikasi dengan anak mahasiswa teknik.</p>
+      </div>
+      <div id="accordionWrap"></div>
+    </section>
+  </main>
+
+  <footer class="site">
+    <p><strong>FTUI Parent Companion</strong> — Inclusive Learning Dashboard</p>
+    <p style="margin-top:.4rem;">Dibuat dengan semangat pendampingan, bukan pengawasan. 💛</p>
+  </footer>
+</div>
+
+<!-- CHATBOT -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="Buka Asisten AI">
+  <span>🤖</span>
+  <span class="chat-fab-badge" id="chatBadge">1</span>
+</button>
+
+<div class="chat-window" id="chatWindow" role="dialog" aria-label="Asisten AI FTUI">
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <div class="chat-avatar">🤖</div>
+      <div>
+        <div class="chat-title">Asisten FTUI</div>
+        <div class="chat-status">Online</div>
+      </div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()" aria-label="Tutup">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-suggestions" id="chatSuggestions">
+    <button onclick="sendSuggestion('Privasi data')">🔒 Privasi</button>
+    <button onclick="sendSuggestion('Kegiatan anak')">📝 Kegiatan</button>
+    <button onclick="sendSuggestion('Tips komunikasi')">💡 Tips</button>
+    <button onclick="sendSuggestion('Anak stres')">💚 Stres</button>
+  </div>
+  <form class="chat-input-wrap" onsubmit="handleChatSubmit(event)">
+    <input type="text" id="chatInput" placeholder="Tanyakan sesuatu..." autocomplete="off" aria-label="Pesan" />
+    <button type="submit" class="chat-send" id="chatSendBtn" aria-label="Kirim">➤</button>
+  </form>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

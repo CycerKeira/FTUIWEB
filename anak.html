@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FTUI Student Companion — Ruang Anak</title>
+<link rel="stylesheet" href="anak.css" />
+</head>
+<body>
+
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="brand-logo">FT</div>
+      <div>
+        <h1>FTUI Student Companion</h1>
+        <p>Ruang Anak · Kendali penuh atas privasimu</p>
+      </div>
+    </div>
+    <div class="login-body">
+      <div class="login-avatar">🎓</div>
+      <h2>Halo, Mahasiswa FTUI!</h2>
+      <p class="sub">Masuk untuk mengatur apa yang ingin kamu bagikan ke orang tua.</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="nim">NIM</label>
+          <input type="text" id="nim" placeholder="2306212345" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Kata Sandi</label>
+          <input type="password" id="password" placeholder="Masukkan kata sandi" required />
+        </div>
+        <button type="submit" class="btn-primary btn-block">Masuk →</button>
+      </form>
+      <div class="privacy-note" style="margin-top:1rem;">
+        <span>🔒</span>
+        <span>Kamu yang pegang kendali. Semua bisa dimatikan kapan saja.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="dashboardScreen">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo">FT</div>
+        <div>
+          <h1>FTUI Student Companion</h1>
+          <p id="studentLine">—</p>
+        </div>
+      </div>
+      <button class="header-logout" onclick="handleLogout()">Keluar</button>
+    </div>
+    <div class="share-banner" id="shareBanner">
+      <div class="share-banner-icon" id="shareBannerIcon">🟢</div>
+      <div class="share-banner-text">
+        <div class="share-banner-title" id="shareBannerTitle">Memuat…</div>
+        <div class="share-banner-sub" id="shareBannerSub">—</div>
+      </div>
+      <button class="btn-secondary btn-sm" onclick="scrollToPanel('privasi')">Atur Privasi</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <div class="tabs-inner">
+      <button class="active" data-panel="beranda">🏠 Beranda</button>
+      <button data-panel="jadwal">📚 Jadwal Matkul</button>
+      <button data-panel="kegiatan">📝 Kegiatan Saya</button>
+      <button data-panel="status">📍 Status Aktivitas</button>
+      <button data-panel="selfreport">📊 Self-Report</button>
+      <button data-panel="privasi">🔒 Privasi</button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="panel active" id="beranda">
+      <div class="section-title">
+        <h2>Halo, <span id="welcomeName">—</span> 👋</h2>
+        <p>Ringkasan apa yang saat ini kamu bagikan ke orang tua.</p>
+      </div>
+      <div class="grid grid-3" id="shareSummaryGrid"></div>
+    </section>
+
+    <section class="panel" id="jadwal">
+      <div class="section-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h2>Jadwal Mata Kuliah</h2>
+          <p>Susun jadwal kelasmu di sini. Hanya terlihat oleh orang tua jika kamu izinkan.</p>
+        </div>
+        <button class="btn-primary" onclick="openMatkulModal()">➕ Tambah Matkul</button>
+      </div>
+      <div class="calendar-container" id="matkulGrid"></div>
+    </section>
+
+    <section class="panel" id="kegiatan">
+      <div class="section-title">
+        <h2>Kegiatan Saya</h2>
+        <p>Catat kegiatan non-formal seperti praktikum, kelompok, atau organisasi.</p>
+      </div>
+      <div class="grid grid-2" id="kegiatanGrid"></div>
+    </section>
+
+    <section class="panel" id="status">
+      <div class="section-title">
+        <h2>Status Aktivitas</h2>
+        <p>Bagikan apa yang sedang kamu lakukan saat ini.</p>
+      </div>
+      <div class="card live-card-mine">
+        <div class="live-pulse" id="livePulse"></div>
+        <div class="live-status">
+          <div class="live-label">STATUS SAAT INI</div>
+          <div class="live-value" id="liveValue">—</div>
+          <div class="live-sub" id="liveSub">—</div>
+        </div>
+        <button class="btn-secondary btn-sm" id="liveShareBtn" onclick="toggleLiveSharing()">—</button>
+      </div>
+      <div class="card" style="margin-top:1.25rem;">
+        <h3>Pilih Status</h3>
+        <div class="status-picker" id="statusPicker"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="selfreport">
+      <div class="section-title">
+        <h2>Self-Report</h2>
+        <p>Bagikan kondisi dirimu secara jujur.</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Mood Belajar Hari Ini</h3>
+          <div class="mood-picker" id="moodPicker"></div>
+        </div>
+        <div class="card">
+          <h3>Jam Tidur Semalam</h3>
+          <div class="range-display"><strong id="sleepValue">6.4</strong> jam</div>
+          <input type="range" id="sleepRange" min="3" max="10" step="0.1" class="range-input" />
+        </div>
+        <div class="card">
+          <h3>Tingkat Stres</h3>
+          <div class="range-display"><strong id="stressValue">2</strong> / 5</div>
+          <input type="range" id="stressRange" min="1" max="5" step="1" class="range-input" />
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="privasi">
+      <div class="section-title">
+        <h2>Kontrol Privasi</h2>
+        <p>Pilih data apa saja yang boleh dilihat orang tua.</p>
+      </div>
+      <div class="card">
+        <div class="privacy-list" id="privacyList"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- MODAL MATKUL -->
+<div class="modal-overlay" id="matkulModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Tambah/Edit Mata Kuliah</h3>
+      <button class="modal-close" onclick="closeMatkulModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="matkulId" />
+      <div class="field">
+        <label>Nama Mata Kuliah *</label>
+        <input type="text" id="mkName" placeholder="Contoh: Kalkulus II" required />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Hari *</label>
+          <select id="mkDay">
+            <option value="Senin">Senin</option>
+            <option value="Selasa">Selasa</option>
+            <option value="Rabu">Rabu</option>
+            <option value="Kamis">Kamis</option>
+            <option value="Jumat">Jumat</option>
+            <option value="Sabtu">Sabtu</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Ruangan</label>
+          <input type="text" id="mkRoom" placeholder="Contoh: MRPQ 301" />
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Jam Mulai *</label>
+          <input type="time" id="mkStart" required />
+        </div>
+        <div class="field">
+          <label>Jam Selesai *</label>
+          <input type="time" id="mkEnd" required />
+        </div>
+      </div>
+      <div class="field">
+        <label>Nama Dosen</label>
+        <input type="text" id="mkDosen" placeholder="Contoh: Dr. Ir. Budi" />
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-secondary" onclick="closeMatkulModal()">Batal</button>
+      <button class="btn-primary" onclick="saveMatkul()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KEGIATAN -->
+<div class="modal-overlay" id="activityModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="activityModalTitle">Tambah Kegiatan</h3>
+      <button class="modal-close" onclick="closeActivityModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="actCategory" />
+      <div class="field">
+        <label>Nama Kegiatan *</label>
+        <input type="text" id="actTitle" placeholder="Contoh: Lab Fisika Dasar" />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Hari</label>
+          <input type="text" id="actDay" placeholder="Senin" />
+        </div>
+        <div class="field">
+          <label>Waktu</label>
+          <input type="text" id="actTime" placeholder="13.00–16.00" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-secondary" onclick="closeActivityModal()">Batal</button>
+      <button class="btn-primary" onclick="saveActivity()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="anak-script.js"></script>
+</body>
+</html>
